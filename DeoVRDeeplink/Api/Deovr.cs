@@ -91,7 +91,6 @@ public class DeoVrController : ControllerBase
                     // Create a randomized duplicate of the video list
                     var random = new Random();
                     var randomizedVideoList = videoList.OrderBy(x => random.Next()).ToList();
-
                     var randomScene = new DeoVrScene
                     {
                         Name = $"{library.Name} - Random",
