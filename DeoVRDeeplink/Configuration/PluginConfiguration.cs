@@ -50,7 +50,7 @@ public class LibraryConfiguration
     public SortBy SortBy { get; set; }
     
     /// <summary>Gets or sets the sort order.</summary>
-    public Jellyfin.Data.Enums.SortOrder SortOrder { get; set; }
+    public Jellyfin.Database.Implementations.Enums.SortOrder SortOrder { get; set; }
     
     /// <summary>Gets or sets a value indicating whether timeline images are enabled.</summary>
     public bool TimelineImages { get; set; }

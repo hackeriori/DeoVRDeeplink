@@ -3,6 +3,7 @@ using DeoVRDeeplink.Configuration;
 using DeoVRDeeplink.Model;
 using DeoVRDeeplink.Utilities;
 using Jellyfin.Data.Enums;
+using Jellyfin.Database.Implementations.Enums;
 using MediaBrowser.Controller.Configuration;
 using MediaBrowser.Controller.Entities;
 using MediaBrowser.Controller.Library;
@@ -141,9 +142,13 @@ public class DeoVrController : ControllerBase
             IsFolder = false,
             OrderBy = GetOrderBySortType(config)
         };
-
+    
         var items = _libraryManager.GetItemList(query);
-        return await Task.FromResult(items.OfType<Video>()).ConfigureAwait(false);
+        return await Task.FromResult( // Deduplicate by ID - Jellyfin 10.11.0 bug?
+            items.OfType<Video>()
+            .GroupBy(v => v.Id)
+            .Select(g => g.First())
+        ).ConfigureAwait(false);
     }
 
     private IReadOnlyList<(ItemSortBy OrderBy, SortOrder SortOrder)> GetOrderBySortType(LibraryConfiguration config) =>

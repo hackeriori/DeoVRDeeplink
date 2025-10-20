@@ -26,11 +26,13 @@ public class DeoVrDeeplinkController(
     IMediaSourceManager mediaSourceManager,
     IHttpContextAccessor httpContextAccessor,
     IServerConfigurationManager config,
-    IItemRepository itemRepository) : ControllerBase
+    IItemRepository itemRepository,
+    IChapterRepository chapterRepository) : ControllerBase
 {
     private readonly IServerConfigurationManager _config = config;
     private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
     private readonly IItemRepository _itemRepository = itemRepository;
+    private readonly IChapterRepository _chapterRepository = chapterRepository;
     private readonly ILibraryManager _libraryManager = libraryManager;
     private readonly ILogger<DeoVrDeeplinkController> _logger = logger;
     private readonly IMediaSourceManager _mediaSourceManager = mediaSourceManager;
@@ -199,9 +201,8 @@ public class DeoVrDeeplinkController(
     {
         try
         {
-            var chapters = _itemRepository.GetChapters(item);
-
-            if (chapters != null && chapters.Count != 0)
+            var chapters = _chapterRepository.GetChapters(item.Id);
+            if (chapters.Count != 0)
                 return chapters
                     .Select(ch => new DeoVrTimestamps
                     {
